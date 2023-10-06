@@ -1,8 +1,14 @@
 from rest_framework import serializers
-from base.models import Item
+from base.models import ParkingSpace, Reservation
 
 
-class ItemSerializer(serializers.ModelSerializer):
+class ParkingSpaceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Item
+        model = ParkingSpace
+        fields = "__all__"
+
+
+class ReservationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reservation
         fields = "__all__"
