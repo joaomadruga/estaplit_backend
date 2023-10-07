@@ -19,15 +19,10 @@ class ParkingSpace(models.Model):
     def clean(self):
         # Validate required days
         required_days = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"]
-        data = json.loads(self.days_of_week)
 
         for day in required_days:
-            if day not in data:
+            if day not in self.working_hours:
                 raise ValidationError(f"Missing data for {day}")
-
-        # Validate payment methods
-        if not self.payment_methods.exists():
-            raise ValidationError("Select at least one payment method.")
 
         super().clean()
 

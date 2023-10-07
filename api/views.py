@@ -22,7 +22,6 @@ def add_parking_space_item(request):
     return Response(f'JSON Content not valid {serializers.ValidationError(serializer.errors)}')
 
 
-
 @api_view(['GET'])
 def get_all_reservation_data(request):
     reservation = Reservation.objects.all()
@@ -35,4 +34,5 @@ def add_reservation_item(request):
     serializer = ReservationSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-    return Response(serializer.data)
+        return Response(serializer.data)
+    return Response(f'JSON Content not valid {serializers.ValidationError(serializer.errors)}')
