@@ -36,3 +36,11 @@ def add_reservation_item(request):
         serializer.save()
         return Response(serializer.data)
     return Response(f'JSON Content not valid {serializers.ValidationError(serializer.errors)}')
+
+
+@api_view(['GET'])
+def get_user_reservations(request, phone_number):
+    print(phone_number)
+    user_reservations = Reservation.objects.filter(driver_phone_number=phone_number)
+    serializer = ReservationSerializer(user_reservations, many=True)
+    return Response(serializer.data)

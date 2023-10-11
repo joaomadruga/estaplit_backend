@@ -6,3 +6,4 @@ mock.json
 base/migrations/__pycache__/
 estaplit_backend/__pycache__/
 base/__pycache__/
+.env

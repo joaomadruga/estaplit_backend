@@ -46,12 +46,12 @@ class ParkingSpace(models.Model):
 
 class Reservation(models.Model):
     class TicketStatus(models.TextChoices):
-        APPROVED = 'APRROVED', 'Confirmada'
+        APPROVED = 'APPROVED', 'Confirmada'
         WAITING = 'WAITING', 'Aguardando estacionamento'
         CANCELLED = 'CANCELLED', 'Cancelada'
 
     parking_id = models.ForeignKey(ParkingSpace, on_delete=models.DO_NOTHING)
-    ticket_date_and_time = models.DurationField()
+    ticket_date_and_time = models.DateTimeField()
     ticket_status = models.CharField(max_length=30, choices=TicketStatus.choices, default=TicketStatus.WAITING)
     created_date = models.DateField(auto_now_add=True)
     ticket_code = models.CharField(max_length=30, default=datetime.now().strftime("%d%m%Y%H%M%S"))
