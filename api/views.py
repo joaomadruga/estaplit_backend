@@ -65,65 +65,69 @@ def search_nearby_parking_spaces(request):
     )
 
     for result in results['results']: 
-        print(result)
-        parking_space = {
-            "latitude": result["geometry"]['location']['lat'],
-            "longitude": result["geometry"]['location']['lng'],
+        if 'rating' not in result:
+            result['rating'] = 0
+        if 'user_ratings_total' not in result:
+            result['user_ratings_total'] = 0
+
+        parking_space = {  
+            "latitude": result['geometry']['location']['lat'],
+            "longitude": result['geometry']['location']['lng'],
             "name": result['name'],
             "place_id": result['place_id'],
             "address": result['vicinity'],
-            "distance": "",
-            "price": "",
-            "rate": "",
-            "day_time": "",
-            "working_time": {
-                "Segunda-feira": "",
-                "Terça-feira": "",
-                "Quarta-feira": "",
-                "Quinta-feira": "",
-                "Sexta-feira": "",
-                "Sábado": "",
-                "Domingo": ""
+            "distance": 500,
+            "price": "NULL",
+            "rate": f"{result['rating']} ({result['user_ratings_total']})",
+            "day_time": "NULL",
+            "working_hours": {
+                "Segunda-feira": "NULL",
+                "Terça-feira": "NULL",
+                "Quarta-feira": "NULL",
+                "Quinta-feira": "NULL",
+                "Sexta-feira": "NULL",
+                "Sábado": "NULL",
+                "Domingo": "NULL"
             },
-            "payment_options": ['CREDIT_CARD', 'DEBIT_CARD', 'PIX', 'CASH'],
-            "open_parking_spot": "",
-            "total_parking_spot": "",
-            "open_schedule_parking_spot": "",
-            "total_schedule_parking_spot": "",
-            "phone_number": "",
+            "payment_options": ["CASH"],
+            "open_parking_spot": 0,
+            "total_parking_spot": 0,
+            "open_schedule_parking_spot": 0,
+            "total_schedule_parking_spot": 0,
+            "phone_number": "+55 81900000000",
             "available_schedules": [
                 {
-                    "date":"12/10",
-                    "day": "segunda",
-                    "hours":[{
+                "date":"NULL",
+                "day": "NULL",
+                "hours":[{
+                "hour":"NULL",
+                "available": 0
+                },
+                {
+                    "hour":"NULL",
+                    "available": 0
+                },
+                {
+                    "hour":"NULL",
+                    "available": 0
+                },
+                {
                     "hour":"10:00",
                     "available": 4
-                    },
-                    {
-                        "hour":"10:00",
-                        "available": 4
-                    },
-                    {
-                        "hour":"10:00",
-                        "available": 4
-                    },
-                    {
-                        "hour":"10:00",
-                        "available": 4
-                    }]
-                }
-            ],
-            "price_table": {
-                "Até 20 minutos": "Grátis",
-                "4 horas": 11,
-                "Hora adicional": 4,
-                "Taxa de reserva": 5
-            },
-            "images": ["https://www.diariodepernambuco.com.br/static/app/noticia_127983242361/2018/07/06/756766/20180706203355962241i.jpg"]
+                }]
+            }],
+                "price_table": {
+                    "Até 20 minutos": "NULL",
+                    "4 horas": 0,
+                    "Hora adicional": 0,
+                    "Taxa de reserva": 0
+                },
+            "images": ["NULL"]
         }
 
-        serializer = ParkingSpaceSerializer(data=request.data)
+        serializer = ParkingSpaceSerializer(data=parking_space)
+        print(serializer.is_valid())
         if serializer.is_valid():
             serializer.save()
-                
+        break
     return Response(results)
