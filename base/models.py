@@ -27,6 +27,7 @@ class ParkingSpace(models.Model):
         super().clean()
 
     created_date = models.DateField(auto_now_add=True)
+    place_id = models.TextField(default="PLACE_ID")
     latitude = models.FloatField()
     longitude = models.FloatField()
     name = models.CharField(max_length=200)
