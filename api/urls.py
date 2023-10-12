@@ -8,5 +8,6 @@ urlpatterns = [
     path('add_parking_space/', views.add_parking_space_item),
     path('add_reservation/', views.add_reservation_item),
     path('reservations/', views.get_all_reservation_data),
-    path('reservations/<str:phone_number>', views.get_user_reservations)
+    path('reservations/<str:phone_number>', views.get_user_reservations),
+    path('reservations/get_nearby_places/', views.search_nearby_parking_spaces)
 ]
