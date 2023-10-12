@@ -122,10 +122,8 @@ def search_nearby_parking_spaces(request):
             "images": ["https://www.diariodepernambuco.com.br/static/app/noticia_127983242361/2018/07/06/756766/20180706203355962241i.jpg"]
         }
 
-        print(parking_space)
-
+        serializer = ParkingSpaceSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+                
     return Response(results)
-    # nearby_parking_spaces = ParkingSpace.objects.filter(latitude__range=(latitude-0.1, latitude+0.1), longitude__range=(longitude-0.1, longitude+0.1))
-    # serializer = ParkingSpaceSerializer(nearby_parking_spaces, many=True)
-    # return Response(serializer.data)
-    # return Response("ok")
