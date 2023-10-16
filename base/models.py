@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 
 from django.db import models
@@ -16,33 +15,43 @@ class ParkingSpace(models.Model):
         PIX = 'PIX', 'Pix'
         CASH = 'CASH', 'Dinheiro'
 
+    def save(self, **kwargs):
+        self.clean()
+        return super(ParkingSpace, self).save(**kwargs)
+
     def clean(self):
         # Validate required days
         required_days = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"]
 
         for day in required_days:
-            if day not in self.working_hours:
+            if self.working_hours and day not in self.working_hours:
                 raise ValidationError(f"Missing data for {day}")
+
+        if self.open_parking_spot and self.total_parking_spot and self.open_parking_spot > self.total_parking_spot:
+            raise ValidationError(f"Open parking spot should not be greater than total parking spot.")
+
+        if self.open_schedule_parking_spot and self.total_schedule_parking_spot and self.open_schedule_parking_spot > self.total_schedule_parking_spot:
+            raise ValidationError(f"Open schedule parking spot should not be greater than total schedule parking spot.")
 
         super().clean()
 
-    created_date = models.DateField(auto_now_add=True,blank=True, null=True)
-    place_id = models.TextField(default="PLACE_ID", unique=True, blank=True, null=True)
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
-    name = models.CharField(max_length=200, null=True, blank=True)
-    address = models.TextField(blank=True, null=True)
-    rate = models.CharField(max_length=50, blank=True, null=True)
-    working_hours = models.JSONField(blank=True, null=True)
-    payment_options = ArrayField(models.CharField(max_length=50, choices=PaymentOptions.choices), blank=True, null=True)
-    open_parking_spot = models.IntegerField(blank=True, null=True)
-    total_parking_spot = models.IntegerField(blank=True, null=True)
-    open_schedule_parking_spot = models.IntegerField(blank=True, null=True)
-    total_schedule_parking_spot = models.IntegerField(blank=True, null=True)
-    phone_number = PhoneNumberField(region='BR', blank=True, null=True)
-    available_schedules = models.JSONField(blank=True, null=True)
-    price_table = models.JSONField(blank=True, null=True)
-    images = ArrayField(models.TextField(), blank=True, null=True)
+    created_date = models.DateField(auto_now_add=True)
+    place_id = models.TextField(unique=True)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    name = models.CharField(max_length=200)
+    address = models.TextField()
+    rate = models.CharField(max_length=50)
+    working_hours = models.JSONField(null=True)
+    payment_options = ArrayField(models.CharField(max_length=50, choices=PaymentOptions.choices), null=True)
+    open_parking_spot = models.IntegerField(null=True)
+    total_parking_spot = models.IntegerField(null=True)
+    open_schedule_parking_spot = models.IntegerField(null=True)
+    total_schedule_parking_spot = models.IntegerField(null=True)
+    phone_number = PhoneNumberField(region='BR')
+    available_schedules = models.JSONField(null=True)
+    price_table = models.JSONField(null=True)
+    images = ArrayField(models.TextField(null=True))
 
 
 class Reservation(models.Model):
